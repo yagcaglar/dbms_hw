@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %}{{acm.name}} {{acm.surname}}{% endblock %}
+{% block content %}
+    <h1 class="title">{{acm.name}} {{acm.surname}}</h1>
+
+    <table class="table">
+      <tr>
+        <th>Full Name:</th>
+        <td>{{acm.name acm.surname}}</td>
+      </tr>
+	  
+      {% if acm.vote %}
+      <tr>
+        <th>Vote Avarage:</th>
+        <td>{{ acm.vote }}</td>
+      </tr>
+      {% endif %}
+	  
+	  {% if acm.tel_num %}
+      <tr>
+        <th>Telephone Number:</th>
+        <td>{{ acm.tel_num }}</td>
+      </tr>
+      {% endif %}
+	  
+	  {% if acm.university %}
+      <tr>
+        <th>University:</th>
+        <td>{{ acm.university }}</td>
+      </tr>
+      {% endif %}
+	  
+	  {% if acm.city %}
+      <tr>
+        <th>City:</th>
+        <td>{{ acm.city }}</td>
+      </tr>
+      {% endif %}
+	  
+	  {% if acm.price %}
+      <tr>
+        <th>Price:</th>
+        <td>{{ acm.price }}</td>
+      </tr>
+      {% endif %}
+	  
+    </table>
+{% endblock %}
