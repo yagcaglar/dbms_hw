@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+
+<section class="hero">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <div class="column is-4 is-offset-4">
+            <h3 class="title has-text-grey">Register</h3>
+            <div class="box">
+              <form action="" method="post" name="login">
+                {{ form.csrf_token }}
+
+				<div class="field">
+                  <div class="control">
+                    {{ form.name(required=True, autofocus=True,
+                                     class='input is-large',
+                                     placeholder='Name') }}
+                  </div>
+                  {% for error in form.name.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+				<div class="field">
+                  <div class="control">
+                    {{ form.surname(required=True, autofocus=True,
+                                     class='input is-large',
+                                     placeholder='Surname') }}
+                  </div>
+                  {% for error in form.surname.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+				
+                <div class="field">
+                  <div class="control">
+                    {{ form.username(required=True, autofocus=True,
+                                     class='input is-large',
+                                     placeholder='Username') }}
+                  </div>
+                  {% for error in form.username.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+				
+				<div class="field">
+                  <div class="control">
+                    {{ form.email(required=True, autofocus=True,
+                                     class='input is-large',
+                                     placeholder='Email') }}
+                  </div>
+                  {% for error in form.email.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+
+                <div class="field">
+                  <div class="control">
+                    {{ form.password(required=True, class='input is-large',
+                                     placeholder='Password') }}
+                  </div>
+                  {% for error in form.password.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+				
+				<div class="field">
+                  <div class="control">
+                    {{ form.confirm_password(required=True, class='input is-large',
+                                     placeholder='Confirm password') }}
+                  </div>
+                  {% for error in form.confirm_password.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+				
+				<div class="field">
+                  <div class="control">
+                    {{ form.is_acm(autofocus=True,
+                                     class='radio', type= 'radio') }}
+                  </div>
+                  {% for error in form.is_acm.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+				
+                <button class="button is-block is-info is-large is-fullwidth">
+                  Register
+                </button>
+				<small> <a href='#'> Forgot Password?</a> </small>
+              </form>
+			  <div>
+				<small> Already have an Account? <a href="{{url_for('login')}}">Login</a></small>
+			  </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}

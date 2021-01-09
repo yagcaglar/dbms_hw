@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}New Comment{% endblock %}
+{% block content %}
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <div class="column is-4 is-offset-4">
+            <h3 class="title has-text-grey">New comment</h3>
+            <div class="box">
+              <form action="" method="post" name="login">
+                {{ form.csrf_token }}
+
+                <div class="field">
+                  <div class="control">
+                    {{ form.content(required=True, autofocus=True,
+                                     class='textarea',
+                                     placeholder='Write your comment here') }}
+                  </div>
+                  {% for error in form.content.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+
+                <button class="button is-dark is-block is-info is-large is-fullwidth ">
+                  Add Comment
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}

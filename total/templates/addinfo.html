@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block title %}Add Composer{% endblock %}
+{% block content %}
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <div class="column is-4 is-offset-4">
+            <h3 class="title has-text-grey">Add Information</h3>
+            <div class="box">
+              <form action="" method="post">
+                {{ form.csrf_token }}
+
+				        <div class="field">
+                  <div class="control">
+                    {{ form.phone(autofocus=True,
+                                     class='input is-large',
+                                     placeholder='Phone Number') }}
+                  </div>
+                  {% for error in form.phone.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+                <div class="field">
+                  <div class="control">
+                    {{ form.city(autofocus=True,
+                                     class='input is-large',
+                                     placeholder='City') }}
+                  </div>
+                  {% for error in form.city.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+
+                <div class="field">
+                  <div class="control">
+                    {{ form.university(autofocus=True,
+                                     class='input is-large',
+                                     placeholder='University') }}
+                  </div>
+                  {% for error in form.university.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+
+                <div class="field">
+                  <div class="control">
+                    {{ form.price(autofocus=True,
+                                     class='input is-large',
+                                     placeholder='Price') }}
+                  </div>
+                  {% for error in form.price.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                <div class="field">
+                  <div class="control">
+                    <p><strong>Choose composer/s you can play from.</strong></p>
+                    {%for composer in composers%}
+                    <input type ="checkbox" name = "composer" value = "{{composer[0]}}"> {{composer[0]}}
+                    {%endfor%}
+                  </div>
+                </div>
+
+                <button class="button is-dark is-block is-info is-large is-fullwidth ">
+                  Add Information
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}

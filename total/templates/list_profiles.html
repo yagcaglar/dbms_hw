@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block title %}Profiles{% endblock %}
+{% block content %}
+<section class="hero">
+      <div class="hero-body">
+		<div class="container">
+			<h1 class="title">All Accompanists</h1>
+				<h2> Filter by</h2>
+				
+				<nav class="navbar"> 
+					
+					<div class="navbar-brand">
+						<span class="navbar-item">
+							{%if composers %}
+							<div class="dropdown is-hoverable">
+								<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+									<span>Composer</span>
+								</button>
+								<div class="dropdown-menu" id="dropdown-menu" role="menu">
+								<div class="dropdown-content">
+									{%for composer in composers%}
+										<a class = "dropdown-item" href = "{{url_for('filter_by_composer', composer_surname = composer[0] )}}">{{composer[0]}}</a>
+									{%endfor%}
+								</div>
+								</div>
+							</div>
+							{% endif %}
+						</span>
+					</div>
+
+					<div class="navbar-brand">
+						<span class="navbar-item">	
+							{%if cities%}
+							<div class="dropdown is-hoverable">
+								<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+									<span>City</span>
+								</button>
+								<div class="dropdown-menu" id="dropdown-menu" role="menu">
+									<div class="dropdown-content">
+										{%for city in cities%}
+										<a class = "dropdown-item" href = "{{url_for('filter_by_city', city_name=city)}}">{{city[0]}}</a>
+										{%endfor%}
+									</div>
+									</div>
+							</div>
+							{%endif%}
+						</span>
+					</div>
+					<div class="navbar-brand">
+						<span class="navbar-item">
+							<div class="dropdown is-hoverable">
+								<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+									<span><a href = "{{url_for('filter_by_price')}}">Price</a></span>
+								</button>
+							</div>
+						</span>
+					</div>
+				</nav>				
+				{% if profiles %}
+				<br>
+				<table class="table is-bordered is-hoverable is-narrow">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Surname</th>
+							<th>Username</th>
+							<th>City</th>
+							<th>Price</th>
+							<th>Vote</th>
+							<th>Score</th>
+						
+						</tr>
+
+					</thead>
+					<tbody>
+						{% for profile in profiles %}
+						<tr>
+							<td>{{ profile[0]}}</td> 
+							<td>{{ profile[1]}}</td> 
+							<td><a href="{{url_for('profile', username = profile[2])}}">{{profile[2]}}</a></td>
+							<td> {{profile[3]}} </td>
+							<td> {{profile[4]}}</td>
+							<td> {{profile[5]}}</td>
+							<td> {{profile[6]}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				{% endif %}
+		</div>
+		</div>
+	</section>
+{%endblock%}

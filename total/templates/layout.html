@@ -1,0 +1,56 @@
+<style>
+	.block{
+		margin-right:50px;
+		margin-left:100px;
+	}
+	.footer{
+		padding: 25px 50px;
+	}
+</style>
+<html>
+	<title> accompaniMEnt {%block title%} {%endblock%}</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<body>
+		<header>
+			<nav class="navbar" aria-label="main navigation">
+					<div class="navbar-brand">
+					  <span class="navbar-item">
+						<a class="button is-dark" href="{{ url_for('home') }}">Home</a>
+					  </span>
+					  <span class="navbar-item">
+						<a class="button is-dark" href="{{ url_for('list_profiles') }}">Accompanist List</a>
+						</span>
+					  {%if current_user.is_anonymous %}
+					   <span class="navbar-item">
+						<a class="button is-dark" href="{{ url_for('login') }}">Login</a>
+						</span>
+						<span class="navbar-item">
+						<a class="button is-dark" href="{{ url_for('register') }}">Register</a>
+					  {% else %}	
+					 <span class="navbar-item">
+						<a class="button is-dark" href="{{ url_for('account', username=current_user.username) }}">Account</a>
+						</span>
+						<span class="navbar-item">
+						<a class="button is-dark" href="{{ url_for('logout') }}">Logout</a>
+					  </span>
+					  {% endif %}
+					  </span>
+					</div>
+				  </nav>
+		</header>
+		{% for message in get_flashed_messages() %}
+        <div class="notification is-info">{{ message }}</div>
+        {% endfor %}
+		{%block content%}{%endblock%}
+		<footer class ="footer">
+			<div class="content has-text-centered">
+				<strong> &copy 2020 Yagmur Caglar </strong>
+			</div>
+		</footer>
+	</body>	
+</html>
+	
+	
+	
+	

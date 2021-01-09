@@ -1,0 +1,173 @@
+{% extends "layout.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<section class="hero"> 
+	<div class="hero-body">
+		<div class="container">
+			<!--name surname username-->
+			<h1> {{user[0]}} {{user[1]}} - <small>{{user[2]}}</small> </h1> 
+				<div>
+					<!--{%if current_user.username == user[2]%}{%endif%}-->
+					<button class= "button" ><a href = "{{url_for('add_info', username=user[2])}}">Update Info</a></button>
+					<button class= "button" ><a href = "{{url_for('new_experience', username=user[2])}}">Add Experience</a></button>
+					<!--vote-->
+					<div class="media">
+						<div class="media-left"><figure class="image is-24x24"><img src="placeholder/icons/envelope.svg" alt=""></figure></div>
+						<div class="media-content">
+						<div class="content">
+							{%if user[9]%}
+							<p>{{user[8]}} - {{user[9]}}</p> 
+							{%else%}
+							<p>{{user[8]}}</p> 
+							{%endif%}
+							<button class="button is-small">Like</button>
+							<button class="button is-small">Dislike</button>
+						</div>
+						</div>
+					</div>
+
+					<!--price-->
+					
+					<div class="media">
+					<div class="media-left"><figure class="image is-24x24"><img src="placeholder/icons/envelope.svg" alt=""></figure></div>
+					<div class="media-content">
+						<div class="content">
+							{%if user[7] %}
+						<p>{{user[7]}}</p> 
+						{%else%}
+						<p>Accompanist has not entered price information.</p> 
+						{%endif%}
+						</div>
+					</div>
+					</div>
+					
+					<!--phone-->
+					{%if user[3] %}
+					<div class="media">
+					<div class="media-left"><figure class="image is-24x24"><img src="placeholder/icons/phone.svg" alt=""></figure></div>
+					<div class="media-content">
+						<div class="content">
+						<p>{{user[3]}}</p> 
+						</div>
+					</div>
+					</div>
+					{%endif%}
+
+					<!--mail-->
+					{%if user[4] %}
+					<div class="media">
+					<div class="media-left"><figure class="image is-24x24"><img src="placeholder/icons/envelope.svg" alt=""></figure></div>
+					<div class="media-content">
+						<div class="content">
+						<p>{{user[4]}}</p> 
+						</div>
+					</div>
+					</div>
+					{%endif%}
+
+					<!--city-->
+					{%if user[6] %}
+					<div class="media">
+					<div class="media-left"><figure class="image is-24x24"><img src="placeholder/icons/map-marker.svg" alt=""></figure></div>
+					<div class="media-content">
+						<div class="content">
+						<p>{{user[6]}}</p>
+						</div>
+					</div>
+					</div>
+					{%endif%}
+
+					<!--university-->
+					{%if user[5] %}
+					<div class="media">
+					<div class="media-left"></div>
+					<div class="media-content">
+						<div class="content">
+						<p>{{user[5]}}</p> 
+						</div>
+					</div>
+					</div>
+					{%endif%}
+
+					<!--experience-->
+					{%if experiences %}
+					<div class="media">
+						<div class="media-left"></div>
+						<div class="media-content">
+							<div class="content">
+							<p><strong>Experiences</strong></p> 
+							</div>
+						</div>
+						</div>
+					
+					{%for experience in experiences%}
+					<div class="media">
+					<div class="media-left"></div>
+					<div class="media-content">
+						<div class="content">
+								<p>{{experience[0]}}, {{experience[1]}}</p> 
+						</div>
+					</div>
+					</div>
+					{%endfor%}
+					{%endif%}
+
+					<!--comments-->
+					{%if comments %}
+					<div class="media">
+						<div class="media-left"></div>
+						<div class="media-content">
+							<div class="content">
+							<p><strong>Comments</strong></p> 
+							</div>
+						</div>
+						</div>
+					
+					{%for comment in comments%}
+					<div class="media">
+					<div class="media-left"></div>
+					<div class="media-content">
+						<div class="content">
+							
+								<p>{{comment[0]}} {{comment[1]}} - {{comment[2]}} <small>{{comment[4]}}</small></p> 
+								<p> {{comment[3]}}</p>
+							
+						</div>
+					</div>
+					</div>
+					{%endfor%}
+					{%endif%}
+
+					
+					<!--reservations-->
+					{%if reservations %}
+					<div class="media">
+						<div class="media-left"></div>
+						<div class="media-content">
+							<div class="content">
+							<p><strong>Reservations</strong></p> 
+							</div>
+						</div>
+						</div>
+					
+					{%for reservation in reservations%}
+					<div class="media">
+					<div class="media-left"></div>
+					<div class="media-content">
+						<div class="content">
+								<p>{{reservation[0]}}, {{reservation[1]}}</p> 
+						</div>
+					</div>
+					</div>
+					{%endfor%}
+					{%endif%}
+
+					
+				</div>
+				<br>
+				<button class= "button" ><a href = "{{url_for('new_comment', username=user[2])}}">Add Comment</a></button>
+				<button class= "button" ><a href = "{{url_for('new_reservation', username=user[2])}}">Add Reservation</a></button>
+		</div>
+	</div>
+</section>  
+{%endblock%}
