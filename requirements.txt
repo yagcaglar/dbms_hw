@@ -1,4 +1,3 @@
-python
 Flask
 Flask-Bcrypt
 Flask-Login
