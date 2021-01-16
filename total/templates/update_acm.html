@@ -1,17 +1,24 @@
 {% extends "layout.html" %}
-{% block title %}Register{% endblock %}
+{% block title %}Add Composer{% endblock %}
 {% block content %}
-
-<section class="hero">
+    <section class="hero">
       <div class="hero-body">
         <div class="container has-text-centered">
           <div class="column is-4 is-offset-4">
-            <h3 class="title has-text-grey">Register</h3>
+            <h3 class="title has-text-grey">Update Information</h3>
             <div class="box">
-              <form action="" method="post" name="login">
+                <div>
+                    <strong><a href="{{url_for('new_experience', username=form.username.data)}}">Add Experience</a></strong>
+                    <strong> | </strong>
+                    <strong><a href="{{url_for('new_reservation', username=form.username.data)}}">Add Reservation</a></strong>
+                    <br>
+                    <strong><a href="{{url_for('delete_exp', username=form.username.data)}}">Delete Experience</a></strong>
+                    <strong> | </strong>
+                    <strong><a href="{{url_for('delete_rsr', username=form.username.data)}}">Delete Reservation</a></strong>
+                    </div>
+              <form action="" method="post">
                 {{ form.csrf_token }}
-
-				<div class="field">
+                <div class="field">
                   <div class="control">
                     {{ form.name(required=True, autofocus=True,
                                      class='input is-large',
@@ -51,11 +58,36 @@
 				
 				<div class="field">
                   <div class="control">
-                    {{ form.email(required=True, autofocus=True,
+                    {{ form.mail(required=True, autofocus=True,
                                      class='input is-large',
                                      placeholder='Email') }}
                   </div>
-                  {% for error in form.email.errors %}
+                  {% for error in form.mail.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+
+				        <div class="field">
+                  <div class="control">
+                    {{ form.phone(autofocus=True,
+                                     class='input is-large',
+                                     placeholder='Phone Number') }}
+                  </div>
+                  {% for error in form.phone.errors %}
+                    <p class="help has-background-warning">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                </div>
+                <div class="field">
+                  <div class="control">
+                    {{ form.city(autofocus=True,
+                                     class='input is-large',
+                                     placeholder='City') }}
+                  </div>
+                  {% for error in form.city.errors %}
                     <p class="help has-background-warning">
                         {{ error }}
                     </p>
@@ -64,48 +96,47 @@
 
                 <div class="field">
                   <div class="control">
-                    {{ form.password(required=True, class='input is-large',
-                                     placeholder='Password') }}
+                    {{ form.university(autofocus=True,
+                                     class='input is-large',
+                                     placeholder='University') }}
                   </div>
-                  {% for error in form.password.errors %}
+                  {% for error in form.university.errors %}
                     <p class="help has-background-warning">
                         {{ error }}
                     </p>
                   {% endfor %}
                 </div>
-				
-				<div class="field">
+
+                <div class="field">
                   <div class="control">
-                    {{ form.confirm_password(required=True, class='input is-large',
-                                     placeholder='Confirm password') }}
+                    {{ form.price(autofocus=True,
+                                     class='input is-large',
+                                     placeholder='Price') }}
                   </div>
-                  {% for error in form.confirm_password.errors %}
+                  {% for error in form.price.errors %}
                     <p class="help has-background-warning">
                         {{ error }}
                     </p>
                   {% endfor %}
-                </div>
-				
-				<div class="field">
+                <div class="field">
                   <div class="control">
-                    {{ form.is_acm(autofocus=True,
-                                     class='radio', type= 'radio') }}
+                    <p><strong>Choose composer/s you can play from.</strong></p>
+                    {%for composer in composers%}
+                    <input type ="checkbox" name = "composer" value = "{{composer[0]}}"> {{composer[0]}}
+                    {%endfor%}
                   </div>
-                  {% for error in form.is_acm.errors %}
-                    <p class="help has-background-warning">
-                        {{ error }}
-                    </p>
-                  {% endfor %}
                 </div>
-				
+
                 <button class="button is-block is-dark is-large is-fullwidth">
-                  Register
+                    Update
                 </button>
-				<small> <a href='#'> Forgot Password?</a> </small>
               </form>
-			  <div>
-				<small> Already have an Account? <a href="{{url_for('login')}}">Login</a></small>
-			  </div>
+              <br>
+
+              <form action="{{url_for('delete_acc', username = form.username.data)}}" method="POST">
+                <button class="button is-block is-danger is-large is-fullwidth" >Delete Account</button>
+              </form>
+
             </div>
           </div>
         </div>

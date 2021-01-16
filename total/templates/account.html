@@ -1,5 +1,42 @@
 {% extends "layout.html" %}
-{% block title %}Account{% endblock %}
+{% block title %}Profile{% endblock %}
 {% block content %}
-	<h1> {{current_user.username}}</h1>
+<section class="hero"> 
+	<div class="hero-body">
+		<div class="container">
+			<!--name surname username-->
+			<div class="media">
+				<div class="media-content">
+					<div class="content">
+						<h1> {{user[1]}} {{user[2]}} - <small>{{user[3]}}</small> </h1> 
+					</div>
+				</div>
+				</div>
+
+					<!--fav list-->
+					{%if acms %}
+					<div class="media">
+						<div class="media-left"></div>
+						<div class="media-content">
+							<div class="content">
+							<p><strong>Favourite Accompanists</strong></p> 
+							</div>
+						</div>
+						</div>
+					
+					{%for acm in acms%}
+					<div class="media">
+					<div class="media-left"></div>
+					<div class="media-content">
+						<div class="content">
+								<p>{{acm[0]}} {{acm[1]}} - <a href = "{{url_for('profile', username = acm[2] )}}">{{acm[2]}}</a></p> 
+						</div>
+					</div>
+					</div>
+					{%endfor%}
+					{%endif%}
+
+		</div>
+	</div>
+</section>  
 {%endblock%}

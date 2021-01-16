@@ -1,41 +1,42 @@
 {% extends "layout.html" %}
-{% block title %}New Reservation{% endblock %}
+{% block title %}New Composer{% endblock %}
 {% block content %}
     <section class="hero">
       <div class="hero-body">
         <div class="container has-text-centered">
           <div class="column is-4 is-offset-4">
-            <h3 class="title has-text-grey">New Reservation</h3>
+            <h3 class="title has-text-grey">New Composer</h3>
             <div class="box">
-              <form action="" method="post" name="login">
+              <form action="" method="post" name="composer">
                 {{ form.csrf_token }}
 
                 <div class="field">
                   <div class="control">
-                    {{ form.date(autofocus=True,type='date', value="yyyy/mm/dd") }}
+                    {{ form.name(required=True, autofocus=True,
+                                     class='input is-large',
+                                     placeholder='Composer Name') }}
                   </div>
-                  {% for error in form.date.errors %}
+                  {% for error in form.name.errors %}
                     <p class="help has-background-warning">
                         {{ error }}
                     </p>
                   {% endfor %}
                 </div>
-
-
                 <div class="field">
                     <div class="control">
-                      {{ form.city(required=True, autofocus=True,
-                        class='input is-large',placeholder='Where will the accompanist play?') }}
+                      {{ form.surname(required=True, autofocus=True,
+                                       class='input is-large',
+                                       placeholder='Composer Surname') }}
                     </div>
-                    {% for error in form.city.errors %}
+                    {% for error in form.surname.errors %}
                       <p class="help has-background-warning">
                           {{ error }}
                       </p>
                     {% endfor %}
                   </div>
-
-                <button class="button is-dark is-block is-large is-fullwidth ">
-                  Add Reservation
+  
+                <button class="button is-block is-dark is-large is-fullwidth ">
+                  Add Composer
                 </button>
               </form>
             </div>

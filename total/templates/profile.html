@@ -5,23 +5,47 @@
 	<div class="hero-body">
 		<div class="container">
 			<!--name surname username-->
-			<h1> {{user[0]}} {{user[1]}} - <small>{{user[2]}}</small> </h1> 
+			<div class="media">
+				<div class="media-content">
+					<div class="content">
+						<h1> {{user[0]}} {{user[1]}} - <small>{{user[2]}}</small> </h1> 
+						{%if current_user.username != user[2]%}
+							<div class="dropdown is-hoverable">
+								<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+									<span>Vote</span>
+								</button>
+								<div class="dropdown-menu" id="dropdown-menu" role="menu">
+								<div class="dropdown-content">
+										<a class = "dropdown-item" href = "{{url_for('like', username=user[2], like=1 )}}">1</a>
+										<a class = "dropdown-item" href = "{{url_for('like', username=user[2], like=2 )}}">2</a>
+										<a class = "dropdown-item" href = "{{url_for('like', username=user[2], like=3 )}}">3</a>
+										<a class = "dropdown-item" href = "{{url_for('like', username=user[2], like=4 )}}">4</a>
+										<a class = "dropdown-item" href = "{{url_for('like', username=user[2], like=5 )}}">5</a>
+								</div>
+								</div>
+							</div>
+							{%if current_user.acm == False%}
+							<button class= "button" ><a href = "{{url_for('add_list', username=user[2])}}">Add List</a></button>
+							{%endif%}
+							<button class= "button" ><a href = "{{url_for('new_comment', username=user[2])}}">Add Comment</a></button>
+						{%endif%}
+					</div>
+				</div>
+				</div>
+				<br>
 				<div>
-					<!--{%if current_user.username == user[2]%}{%endif%}-->
-					<button class= "button" ><a href = "{{url_for('add_info', username=user[2])}}">Update Info</a></button>
-					<button class= "button" ><a href = "{{url_for('new_experience', username=user[2])}}">Add Experience</a></button>
+					
 					<!--vote-->
 					<div class="media">
-						<div class="media-left"><figure class="image is-24x24"><img src="placeholder/icons/envelope.svg" alt=""></figure></div>
+						<div class="media-left"><figure class="image is-24x24"><img src="../static/star.png" alt=""></figure></div>
 						<div class="media-content">
 						<div class="content">
 							{%if user[9]%}
-							<p>{{user[8]}} - {{user[9]}}</p> 
+							<p>{{'%0.2f' %user[9]}} - {{user[8]}} votes </p> 
 							{%else%}
-							<p>{{user[8]}}</p> 
+							<p>Accompanist has no votes.</p> 
 							{%endif%}
-							<button class="button is-small">Like</button>
-							<button class="button is-small">Dislike</button>
+							
 						</div>
 						</div>
 					</div>
@@ -29,7 +53,7 @@
 					<!--price-->
 					
 					<div class="media">
-					<div class="media-left"><figure class="image is-24x24"><img src="placeholder/icons/envelope.svg" alt=""></figure></div>
+					<div class="media-left"><figure class="image is-16x16"><img src="../static/tl.svg" alt=""></figure></div>
 					<div class="media-content">
 						<div class="content">
 							{%if user[7] %}
@@ -44,7 +68,7 @@
 					<!--phone-->
 					{%if user[3] %}
 					<div class="media">
-					<div class="media-left"><figure class="image is-24x24"><img src="placeholder/icons/phone.svg" alt=""></figure></div>
+					<div class="media-left"><figure class="image is-24x24"><img src="../static/telll.png" alt=""></figure></div>
 					<div class="media-content">
 						<div class="content">
 						<p>{{user[3]}}</p> 
@@ -56,7 +80,7 @@
 					<!--mail-->
 					{%if user[4] %}
 					<div class="media">
-					<div class="media-left"><figure class="image is-24x24"><img src="placeholder/icons/envelope.svg" alt=""></figure></div>
+					<div class="media-left"><figure class="image is-24x24"><img src="../static/mail.png" alt=""></figure></div>
 					<div class="media-content">
 						<div class="content">
 						<p>{{user[4]}}</p> 
@@ -68,7 +92,7 @@
 					<!--city-->
 					{%if user[6] %}
 					<div class="media">
-					<div class="media-left"><figure class="image is-24x24"><img src="placeholder/icons/map-marker.svg" alt=""></figure></div>
+					<div class="media-left"><figure class="image is-24x24"><img src="../static/city.png" alt=""></figure></div>
 					<div class="media-content">
 						<div class="content">
 						<p>{{user[6]}}</p>
@@ -80,10 +104,34 @@
 					<!--university-->
 					{%if user[5] %}
 					<div class="media">
-					<div class="media-left"></div>
+						<div class="media-left"><figure class="image is-24x24"><img src="../static/edu.jpg" alt=""></figure></div>
 					<div class="media-content">
 						<div class="content">
 						<p>{{user[5]}}</p> 
+						</div>
+					</div>
+					</div>
+					{%endif%}
+
+					<!--repertoire-->
+					{%if repertoire %}
+					<div class="media">
+						<div class="media-left"></div>
+						<div class="media-content">
+							<div class="content">
+							<p><strong>Repertoire</strong></p> 
+							</div>
+						</div>
+						</div>
+					
+					
+					<div class="media">
+					<div class="media-left"></div>
+					<div class="media-content">
+						<div class="content">
+							{%for composer in repertoire%}
+								<p>{{composer[0]}}</p>
+								{%endfor%}
 						</div>
 					</div>
 					</div>
@@ -100,18 +148,48 @@
 						</div>
 						</div>
 					
-					{%for experience in experiences%}
+					
 					<div class="media">
 					<div class="media-left"></div>
 					<div class="media-content">
 						<div class="content">
+							
+							{%for experience in experiences%}
 								<p>{{experience[0]}}, {{experience[1]}}</p> 
+								{%endfor%}
+							
 						</div>
 					</div>
 					</div>
-					{%endfor%}
+					
+					
 					{%endif%}
 
+					<!--reservations-->
+					{%if reservations %}
+					<div class="media">
+						<div class="media-left"></div>
+						<div class="media-content">
+							<div class="content">
+							<p><strong>Reservations</strong></p> 
+							</div>
+						</div>
+						</div>
+					
+					
+					<div class="media">
+					<div class="media-left"></div>
+					<div class="media-content">
+						<div class="content">
+							{%for reservation in reservations%}
+								<p>{{reservation[0]}}, {{reservation[1]}}</p> 
+								{%endfor%}
+						</div>
+					</div>
+					</div>
+					
+					{%endif%}
+					
 					<!--comments-->
 					{%if comments %}
 					<div class="media">
@@ -138,35 +216,9 @@
 					{%endfor%}
 					{%endif%}
 
-					
-					<!--reservations-->
-					{%if reservations %}
-					<div class="media">
-						<div class="media-left"></div>
-						<div class="media-content">
-							<div class="content">
-							<p><strong>Reservations</strong></p> 
-							</div>
-						</div>
-						</div>
-					
-					{%for reservation in reservations%}
-					<div class="media">
-					<div class="media-left"></div>
-					<div class="media-content">
-						<div class="content">
-								<p>{{reservation[0]}}, {{reservation[1]}}</p> 
-						</div>
-					</div>
-					</div>
-					{%endfor%}
-					{%endif%}
-
-					
 				</div>
 				<br>
-				<button class= "button" ><a href = "{{url_for('new_comment', username=user[2])}}">Add Comment</a></button>
-				<button class= "button" ><a href = "{{url_for('new_reservation', username=user[2])}}">Add Reservation</a></button>
+
 		</div>
 	</div>
 </section>  

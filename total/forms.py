@@ -15,14 +15,12 @@ class RegistrationForm(FlaskForm):
 	submit = SubmitField('Sign Up')
 
 	def validate_username(self, username):
-		#user = User.query.filter_by(username=username.data).first()
 		cur.execute("SELECT username FROM person where username='%s'" % username.data)
 		user = cur.fetchone()
 		if user is not None:
 			raise ValidationError('That username is taken. Please choose a different one.')
 
 	def validate_email(self, email):
-		#user = User.query.filter_by(email=email.data).first()
 		cur.execute("SELECT mail FROM person where mail='%s'" % email)
 		user = cur.fetchone()
 		if user is not None:
@@ -32,7 +30,6 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
 	username = StringField('username',validators=[DataRequired()])
 	password = PasswordField('Password', validators=[DataRequired()])
-	#remember = BooleanField('Remember Me')
 	submit = SubmitField('Login')
 	
 class CommentForm(FlaskForm):
@@ -52,3 +49,23 @@ class ReservationForm(FlaskForm):
 class ExperienceForm(FlaskForm):
 	year = IntegerField('date',validators=[DataRequired()])
 	city = StringField('city',validators=[DataRequired()])
+
+class UpdateForm(FlaskForm):
+	name= StringField('Name', validators=[DataRequired()])
+	surname = StringField('Surname', validators=[DataRequired()])
+	username = StringField('Username',validators=[DataRequired(), Length(min=2, max=20)])
+	mail = StringField('Email',validators=[DataRequired(), Email()])
+
+class UpdateAcm(FlaskForm):
+	name= StringField('Name', validators=[DataRequired()])
+	surname = StringField('Surname', validators=[DataRequired()])
+	username = StringField('Username',validators=[DataRequired(), Length(min=2, max=20)])
+	mail = StringField('Email',validators=[DataRequired(), Email()])
+	phone = StringField('phone')
+	city = StringField('city')
+	university = StringField('university')
+	price = IntegerField('price')
+
+class ComposerForm(FlaskForm):
+	name= StringField('Name', validators=[DataRequired()])
+	surname = StringField('Surname', validators=[DataRequired()])

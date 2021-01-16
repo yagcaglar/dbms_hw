@@ -6,21 +6,33 @@
 	.footer{
 		padding: 25px 50px;
 	}
+	
 </style>
 <html>
 	<title> accompaniMEnt {%block title%} {%endblock%}</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="shortcut icon" href="/static/sol.svg" />
 	<body>
+		<section class="hero"> 
+			<div class="hero-body">
+				<div class="container">
 		<header>
 			<nav class="navbar" aria-label="main navigation">
-					<div class="navbar-brand">
+					<div class="navbar-start">
 					  <span class="navbar-item">
 						<a class="button is-dark" href="{{ url_for('home') }}">Home</a>
 					  </span>
 					  <span class="navbar-item">
 						<a class="button is-dark" href="{{ url_for('list_profiles') }}">Accompanist List</a>
 						</span>
+						{%if current_user.is_authenticated%}
+						<span class="navbar-item">
+							<a class="button is-dark" href="{{ url_for('add_composer') }}">Add Composer</a>
+							</span>
+						{%endif%}
+					</div>
+					<div class="navbar-end">
 					  {%if current_user.is_anonymous %}
 					   <span class="navbar-item">
 						<a class="button is-dark" href="{{ url_for('login') }}">Login</a>
@@ -28,17 +40,35 @@
 						<span class="navbar-item">
 						<a class="button is-dark" href="{{ url_for('register') }}">Register</a>
 					  {% else %}	
-					 <span class="navbar-item">
-						<a class="button is-dark" href="{{ url_for('account', username=current_user.username) }}">Account</a>
-						</span>
+					 
+
+						{%if current_user.acm == False %}
+						 <span class="navbar-item">
+						<a class="button is-dark" href="{{ url_for('account', username=current_user.username) }}">Profile</a>
+					</span>
+					<span class="navbar-item">
+						<a class="button is-dark" href="{{ url_for('update_account', username=current_user.username) }}">Update</a>
+					</span>
+						{%else%}
 						<span class="navbar-item">
-						<a class="button is-dark" href="{{ url_for('logout') }}">Logout</a>
-					  </span>
-					  {% endif %}
+						<a class="button is-dark" href="{{ url_for('profile', username=current_user.username) }}">Profile</a>
+					</span>
+					<span class="navbar-item">
+						<a class="button is-dark" href="{{ url_for('update_acm', username=current_user.username) }}">Update</a>
+					</span>
+						{%endif%}
+						<span class="navbar-item">
+							<a class="button is-dark is-left" href="{{ url_for('logout') }}">Logout</a>
+						  </span>
+						  {% endif %}
+						
+					</div>
+						
 					  </span>
 					</div>
 				  </nav>
 		</header>
+		
 		{% for message in get_flashed_messages() %}
         <div class="notification is-info">{{ message }}</div>
         {% endfor %}
@@ -48,6 +78,9 @@
 				<strong> &copy 2020 Yagmur Caglar </strong>
 			</div>
 		</footer>
+		</div>
+		</div>
+		</section>
 	</body>	
 </html>
 	

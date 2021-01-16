@@ -4,8 +4,8 @@
 <section class="hero">
       <div class="hero-body">
 		<div class="container">
-			<h1 class="title">All Accompanists</h1>
-				<h2> Filter by</h2>
+			<p class="title">All Accompanists</p>
+				<p class ="subtitle"> Filter by</p>
 				
 				<nav class="navbar"> 
 					
@@ -38,7 +38,7 @@
 								<div class="dropdown-menu" id="dropdown-menu" role="menu">
 									<div class="dropdown-content">
 										{%for city in cities%}
-										<a class = "dropdown-item" href = "{{url_for('filter_by_city', city_name=city)}}">{{city[0]}}</a>
+										<a class = "dropdown-item" href = "{{url_for('filter_by_city', city_name=city[0])}}">{{city[0]}}</a>
 										{%endfor%}
 									</div>
 									</div>
@@ -68,6 +68,7 @@
 							<th>Price</th>
 							<th>Vote</th>
 							<th>Score</th>
+							<th>Repertoire</th>
 						
 						</tr>
 
@@ -81,7 +82,19 @@
 							<td> {{profile[3]}} </td>
 							<td> {{profile[4]}}</td>
 							<td> {{profile[5]}}</td>
-							<td> {{profile[6]}}</td>
+							{%if profile[6] %}
+							<td> {{'%0.2f' %profile[6]}}</td>
+							{%else%}
+							<td> {{profile[5]}}</td>
+							{%endif%}
+							<td>
+								{%for rep in repertoires%}
+									{%if rep!= '' %}
+										{{rep}} 
+
+									{%endif%}
+								{%endfor%}
+								</td>
 						</tr>
 						{% endfor %}
 					</tbody>
