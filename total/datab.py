@@ -1,8 +1,7 @@
 from total import cur,con
 
 def create_db():
-    sql1 = """CREATE DOMAIN SCORES AS FLOAT CHECK ((VALUE>=1.0) AND (VALUE<=5.0))
-
+    sql1 = """CREATE DOMAIN SCORES AS FLOAT CHECK ((VALUE>=1.0) AND (VALUE<=5.0)
             CREATE TABLE PERSON(
                 USER_ID SERIAL PRIMARY KEY,
                 NAME VARCHAR(20) NOT NULL,
@@ -77,12 +76,11 @@ def create_db():
                 USER_ID SERIAL PRIMARY KEY, 
                 VOTE INTEGER DEFAULT 0, 
                 SCORE SCORES, 
-                FOREIGN KEY (USER_ID) REFERENCES ACCOMPANIST(USER_ID) ON DELETE CASCADE);
-            """
+                FOREIGN KEY (USER_ID) REFERENCES ACCOMPANIST(USER_ID) ON DELETE CASCADE);"""
     cur.execute(sql1)
-	con.commit()
-    
-	sql="""insert into composer (name, surname) values ('Ludwig van', 'Beethoven');
+    con.commit()
+
+    sql="""insert into composer (name, surname) values ('Ludwig van', 'Beethoven');
             insert into composer (name, surname) values ('Samuel', 'Barber');
             insert into composer (name, surname) values ('Charles de', 'Bériot');
             insert into composer (name, surname) values ('Johannes', 'Brahms');
@@ -129,5 +127,5 @@ def create_db():
             insert into composer (name, surname) values ('Francis', 'Poulenc');
             insert into composer (name, surname) values ('Sergei', 'Prokofiev');
             insert into composer (name, surname) values ('Sergei', 'Rachmaninoff');"""
-	cur.execute(sql)
-	con.commit()
+    cur.execute(sql)
+    con.commit()
