@@ -157,7 +157,7 @@ def list_profiles():
 	cur.execute("select city from accompanist group by city order by city asc")
 	cities = cur.fetchall()
 	cur.execute("select surname from composer group by surname order by surname asc")
-	composers = cur.fetchall()	
+	composers = cur.fetchall()
 	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers, repertoires=repertoires)
 
 @app.route("/list_profiles/filter_by_city/<city_name>")
