@@ -1,1 +1,2 @@
-web:gunicorn run:app
+heroku ps:scale web=1
+web:gunicorn run:app --log-level=debug
