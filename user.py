@@ -1,6 +1,6 @@
 from flask import current_app
 from flask_login import UserMixin
-from total import cur
+from server import cur
 
 class User(UserMixin):
     def __init__(self, user_id, username, password, acm):

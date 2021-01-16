@@ -1,9 +1,9 @@
 from flask import render_template, url_for, flash, redirect, request
-from total import app, cur, bcrypt, login_manager, con
-from total.forms import RegistrationForm, LoginForm, CommentForm, AddInfoForm, ReservationForm, ExperienceForm, UpdateForm, UpdateAcm, ComposerForm
+from server import app, cur, bcrypt, login_manager, con
+from forms import RegistrationForm, LoginForm, CommentForm, AddInfoForm, ReservationForm, ExperienceForm, UpdateForm, UpdateAcm, ComposerForm
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import date,datetime
-from total.user import get_user
+from user import get_user
 
 @login_manager.user_loader
 def load_user(username):

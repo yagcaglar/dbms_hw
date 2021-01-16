@@ -1,4 +1,4 @@
-from total import cur,con
+from server import cur,con
 
 def create_db():
     sql1 = """CREATE DOMAIN SCORES AS FLOAT CHECK ((VALUE>=1.0) AND (VALUE<=5.0)
