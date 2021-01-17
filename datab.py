@@ -1,7 +1,7 @@
 from server import cur,con
 
 def create_db():
-    sql1 = """CREATE DOMAIN SCORES AS FLOAT CHECK ((VALUE>=1.0) AND (VALUE<=5.0);
+    sql1 = """CREATE DOMAIN SCORES AS FLOAT CHECK ((VALUE>=1.0) AND (VALUE<=5.0));
             CREATE TABLE PERSON(
                 USER_ID SERIAL PRIMARY KEY,
                 NAME VARCHAR(20) NOT NULL,
