@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {%block title %} Home{% endblock %}
 {%block content%}
-
+<div style="background-color: white; margin:50px 60px 20px 60px; padding-bottom:50px; border-radius:10px;" >
 <section class="hero"> 
 	<div class="hero-body">
 		<div class="container">
@@ -10,7 +10,7 @@
 		</div>
 	</div>
 </section>
-<div class="block"> In Classical Music monophonic instruments such as violin, 
+<div class="block"> <p>In Classical Music monophonic instruments such as violin, 
 cello or flute may need accompaniment. This is called “correpetition” 
 and it is needed especially when monophonic instrument players take place
  in exams, seminars or concerts. Finding qualified accompanist in such
@@ -21,12 +21,17 @@ and it is needed especially when monophonic instrument players take place
  hard to reach as they may not share their contact information.
  Moreover, contacting with the pianist, arranging appointment and
  asking for appropriate repertoire takes considerable time. 
- </div>
- <div class="block">Aim of this system is to connect those customers and 
+ </p>
+ <br>
+ <p>Aim of this system is to connect those customers and 
  accompanists. By this system, every accompanist can design
  his/her webpage by adding his/her repertoire, appointment schedule,
  educational background, work experiences, contact information 
  and price while customers can search by filtering city, composer and piece. 	 
- </div>
-	 
+ </p>
+ <br>
+ <p><strong>Total number of users : {{person[0]}}</strong></p>
+ <p><strong>Total number of accompanists: {{acm[0]}}</strong></p>
+</div>
+</div> 
 {%endblock%}

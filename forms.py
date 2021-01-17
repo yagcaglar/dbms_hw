@@ -17,7 +17,7 @@ class RegistrationForm(FlaskForm):
 	def validate_username(self, username):
 		sql="SELECT username FROM person where username='%s'".format(username.data)
 		cur.execute(sql)
-		user = cur.fetchone()
+		user = cur.fetchone(
 		if user is not None:
 			raise ValidationError('That username is taken. Please choose a different one.')
 
@@ -47,6 +47,7 @@ class AddInfoForm(FlaskForm):
 class ReservationForm(FlaskForm):
 	date = DateField('date',validators=[DataRequired()])
 	city = StringField('city',validators=[DataRequired()])
+	content = StringField('Content', validators=[DataRequired()])
 
 class ExperienceForm(FlaskForm):
 	year = IntegerField('date',validators=[DataRequired()])

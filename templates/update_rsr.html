@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block title %}Update Reservation{% endblock %}
+{% block content %}
+
+<section class="hero">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <div class="column is-4 is-offset-4" style="background-color: white; border-radius:10px; padding-top:30px;">
+            <h3 class="title has-text-grey">Update Reservation</h3>
+            <div class="box">
+              <form action="" method="post" name="login">
+                {{ form.csrf_token }}
+
+				<div class="field">
+                    <div class="control">
+                      {{ form.date(autofocus=True,type='date', value="yyyy/mm/dd") }}
+                    </div>
+                    {% for error in form.date.errors %}
+                      <p class="help has-background-warning">
+                          {{ error }}
+                      </p>
+                    {% endfor %}
+                  </div>
+  
+  
+                  <div class="field">
+                      <div class="control">
+                        {{ form.city(required=True, autofocus=True,
+                          class='input is-large',placeholder='Where will the accompanist play?') }}
+                      </div>
+                      {% for error in form.city.errors %}
+                        <p class="help has-background-warning">
+                            {{ error }}
+                        </p>
+                      {% endfor %}
+                    </div>
+  
+                    <div class="field">
+                      <div class="control">
+                        {{ form.content(required=True, autofocus=True,
+                                         class='textarea',
+                                         placeholder='Brief information.') }}
+                      </div>
+                      {% for error in form.content.errors %}
+                        <p class="help has-background-warning">
+                            {{ error }}
+                        </p>
+                      {% endfor %}
+                    </div>
+				
+                <button class="button is-block is-dark is-large is-fullwidth">
+                    Update
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}

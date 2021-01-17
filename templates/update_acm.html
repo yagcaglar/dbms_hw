@@ -4,7 +4,7 @@
     <section class="hero">
       <div class="hero-body">
         <div class="container has-text-centered">
-          <div class="column is-4 is-offset-4">
+          <div class="column is-4 is-offset-4" style="background-color: white; border-radius:10px; padding-top:30px;">
             <h3 class="title has-text-grey">Update Information</h3>
             <div class="box">
                 <div>
@@ -15,6 +15,8 @@
                     <strong><a href="{{url_for('delete_exp', username=form.username.data)}}">Delete Experience</a></strong>
                     <strong> | </strong>
                     <strong><a href="{{url_for('delete_rsr', username=form.username.data)}}">Delete Reservation</a></strong>
+                    <br>
+                    <strong><a href="{{url_for('list_rsr', username=form.username.data)}}">Update Reservation</a></strong>
                     </div>
               <form action="" method="post">
                 {{ form.csrf_token }}
@@ -120,10 +122,15 @@
                   {% endfor %}
                 <div class="field">
                   <div class="control">
+        
                     <p><strong>Choose composer/s you can play from.</strong></p>
+               
                     {%for composer in composers%}
+      
                     <input type ="checkbox" name = "composer" value = "{{composer[0]}}"> {{composer[0]}}
+                  
                     {%endfor%}
+                  
                   </div>
                 </div>
 

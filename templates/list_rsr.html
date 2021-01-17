@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %}List Reservation{% endblock %}
+{% block content %}
+<div style="background-color: white;margin:50px 60px 20px 60px; padding-bottom:50px; border-radius:10px;">
+<section class="hero"> 
+	<div class="hero-body">
+		<div class="container">
+					{%if list %}
+					<div class="media">
+						<div class="media-left"></div>
+						<div class="media-content">
+							<div class="content">
+							<p><strong>Select Reservation to Update</strong></p> 
+							</div>
+						</div>
+						</div>
+					
+                    {%for rsr in list%}
+					<div class="media">
+					<div class="media-left"></div>
+					<div class="media-content">
+						<div class="content">
+								<a href="{{url_for('update_rsr', username=user, city=rsr[0], date=rsr[1])}}"><p>{{rsr[1]}}, {{rsr[0]}} : <small>{{rsr[2]}}</small></p></a>
+						</div>
+					</div>
+					</div>
+					{%endfor%}
+					{%endif%}
+
+				</div>
+				<br>
+
+		</div>
+	</div>
+</section>  
+</div>
+{%endblock%}

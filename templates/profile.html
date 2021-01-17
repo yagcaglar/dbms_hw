@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}Profile{% endblock %}
 {% block content %}
+<div style="background-color: white;margin:50px 60px 20px 60px; padding-bottom:50px; border-radius:10px;">
 <section class="hero"> 
 	<div class="hero-body">
 		<div class="container">
@@ -182,7 +183,7 @@
 					<div class="media-content">
 						<div class="content">
 							{%for reservation in reservations%}
-								<p>{{reservation[0]}}, {{reservation[1]}}</p> 
+								<p>{{reservation[0]}}, {{reservation[1]}} : <small>{{reservation[2]}}</small> </p> 
 								{%endfor%}
 						</div>
 					</div>
@@ -222,4 +223,5 @@
 		</div>
 	</div>
 </section>  
+</div>
 {%endblock%}

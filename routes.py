@@ -12,35 +12,35 @@ def load_user(username):
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html')
-
+	cur.execute("select count(username) from person")
+	person = cur.fetchone()
+	cur.execute("select count(user_id) from accompanist")
+	acm = cur.fetchone()
+	return render_template('home.html', person=person, acm= acm)
+	
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
 		return redirect(url_for('home'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		sql="select username from person where username='{}'".format(form.username.data)
-		cur.execute(sql)
-		account = cur.fetchone()
-		if account is None:
-			hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-			sql="insert into person (name,surname,username,password,mail,is_acm) values(%s,%s,%s,%s,%s,%s)"
-			cur.execute(sql,(form.name.data, form.surname.data, form.username.data, hashed_password, form.email.data, bool(form.is_acm.data)))
+		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+		sql="insert into person (name,surname,username,password,mail,is_acm) values(%s,%s,%s,%s,%s,%s)"
+		cur.execute(sql,(form.name.data, form.surname.data, form.username.data, hashed_password, form.email.data, bool(form.is_acm.data)))
+		con.commit()
+		if bool(form.is_acm.data) == True:
+			sql ="select user_id from person where username = '{}'".format(form.username.data)
+			cur.execute(sql)
+			user_id = cur.fetchone()
+			cur.execute("insert into accompanist (user_id) values(%s)",(user_id))
+			cur.execute("insert into vote (user_id) values(%s)",(user_id))
 			con.commit()
-			if bool(form.is_acm.data) == True:
-				sql ="select user_id from person where username = '{}'".format(form.username.data)
-				cur.execute(sql)
-				user_id = cur.fetchone()
-				cur.execute("insert into accompanist (user_id) values(%s)",(user_id))
-				cur.execute("insert into vote (user_id) values(%s)",(user_id))
-				con.commit()
-				user=get_user(form.username.data)
-				login_user(user)
-				flash('Your account has been created please add more information.')
-				return redirect(url_for('add_info', username = form.username.data))
-			flash('Your account has been created!')
-			return redirect(url_for('login'))
+			user=get_user(form.username.data)
+			login_user(user)
+			flash('Your account has been created please add more information.')
+			return redirect(url_for('add_info', username = form.username.data))
+		flash('Your account has been created!')
+		return redirect(url_for('login'))
 	return render_template('register.html', title='Register', form=form)
 
 @app.route("/add_info/<username>", methods=['GET', 'POST'])
@@ -55,7 +55,7 @@ def add_info(username):
 	form = AddInfoForm()
 
 	if form.validate_on_submit():
-		sql = "update accompanist set phone_num = '{}', city='{}', university = '{}', price = '{}' where user_id = {}".format(form.phone.data, form.city.data, form.university.data, form.price.data, user_id[0])
+		sql = "update accompanist set phone_num = '{}', city='{}', university = '{}', price = '{}' where user_id = {}".format(form.phone.data, form.city.data, form.university.data, form.price.data, user_info[0])
 		cur.execute(sql)
 		con.commit()
 		if request.method == 'POST':
@@ -64,7 +64,7 @@ def add_info(username):
 				sql = "select composer_id from composer where surname = '%s'"%selection
 				cur.execute(sql)
 				comp_id =cur.fetchone()
-				sql = "insert into acm_comp (acm_id, composer_id) values({},{})".format(user_id[0],comp_id[0])
+				sql = "insert into acm_comp (acm_id, composer_id) values({},{})".format(user_info[0],comp_id[0])
 				cur.execute(sql)
 			con.commit()
 			flash('Informations are added.')
@@ -132,7 +132,7 @@ def profile(username):
 		cur.execute(experience_info)
 		experiences = cur.fetchall()
 
-		reservation_info = """select reservation.rsr_date, reservation.city from reservation inner join accompanist on reservation.acm_id = accompanist.user_id
+		reservation_info = """select reservation.rsr_date, reservation.city, reservation.content from reservation inner join accompanist on reservation.acm_id = accompanist.user_id
 							where accompanist.user_id = {}""".format(user_id[0])
 		cur.execute(reservation_info)
 		reservations = cur.fetchall()
@@ -140,7 +140,7 @@ def profile(username):
 		return render_template('profile.html', title='Profile', user = user_info, comments = comments, repertoire = repertoire, reservations = reservations, experiences = experiences)
 	else:
 		flash('No such accompanist account.')
-		return render_template('home.html', title='Home')
+		return redirect(url_for('home'))
 
 @app.route("/list_profiles")
 def list_profiles():
@@ -155,9 +155,7 @@ def list_profiles():
 		sql="select composer.surname from acm_comp inner join composer on acm_comp.composer_id=composer.composer_id where acm_comp.acm_id ={}".format(profile[7])
 		cur.execute(sql)
 		rep=cur.fetchall()
-		for i in range(len(rep)):
-			repertoires.append(rep[i][0])
-	print(repertoires)
+		repertoires.append(rep)
 	cur.execute("select city from accompanist group by city order by city asc")
 	cities = cur.fetchall()
 	cur.execute("select surname from composer group by surname order by surname asc")
@@ -167,23 +165,29 @@ def list_profiles():
 @app.route("/list_profiles/filter_by_city/<city_name>")
 def filter_by_city(city_name):
 	print(city_name)
-	sql = """select person.name, person.surname, person.username, accompanist.city, accompanist.price, vote.vote, vote.score
+	sql = """select person.name, person.surname, person.username, accompanist.city, accompanist.price, vote.vote, vote.score,person.user_id
 			from person, accompanist, vote
 			where (person.is_acm=True and accompanist.user_id = person.user_id and vote.user_id = person.user_id and accompanist.city ='{}') order by person.name asc""" .format(city_name)
 	cur.execute(sql)
 	profiles=cur.fetchall()
+	repertoires=[]
+	for profile in profiles:
+		sql="select composer.surname from acm_comp inner join composer on acm_comp.composer_id=composer.composer_id where acm_comp.acm_id ={}".format(profile[7])
+		cur.execute(sql)
+		rep=cur.fetchall()
+		repertoires.append(rep)
 	cur.execute("select city from accompanist group by city order by city asc")
 	cities = cur.fetchall()
 	cur.execute("select surname from composer group by surname order by surname asc")
 	composers = cur.fetchall()
-	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers)
+	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers, repertoires=repertoires)
 
 @app.route("/list_profiles/filter_by_composer/<composer_surname>")
 def filter_by_composer(composer_surname):
 	sql = "select composer_id from composer where surname='%s'"%composer_surname
 	cur.execute(sql)
 	comp_id = cur.fetchone()
-	sql = """SELECT m1.name, m1.surname, m1.username, m1.city, m1.price, m1.vote, m1.score 
+	sql = """SELECT m1.name, m1.surname, m1.username, m1.city, m1.price, m1.vote, m1.score,m1.user_id 
 			FROM acm_comp INNER JOIN 
 				(select person.name, person.surname, person.username, accompanist.city, accompanist.price, vote.vote, vote.score, person.user_id, person.is_acm 
 				from person inner join accompanist on accompanist.user_id = person.user_id
@@ -191,25 +195,37 @@ def filter_by_composer(composer_surname):
 			WHERE m1.is_acm=True AND acm_comp.composer_id = {} order by m1.name asc""".format(comp_id[0]) 
 	cur.execute(sql)
 	profiles=cur.fetchall()
+	repertoires=[]
+	for profile in profiles:
+		sql="select composer.surname from acm_comp inner join composer on acm_comp.composer_id=composer.composer_id where acm_comp.acm_id ={}".format(profile[7])
+		cur.execute(sql)
+		rep=cur.fetchall()
+		repertoires.append(rep)
 	cur.execute("select city from accompanist group by city order by city asc")
 	cities = cur.fetchall()
 	cur.execute("select surname from composer group by surname order by surname asc")
 	composers = cur.fetchall()
-	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers)
+	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers, repertoires=repertoires)
 
 @app.route("/list_profiles/filter_by_price")
 def filter_by_price():
-	sql = """select person.name, person.surname, person.username, accompanist.city, accompanist.price, vote.vote, vote.score
+	sql = """select person.name, person.surname, person.username, accompanist.city, accompanist.price, vote.vote, vote.score,person.user_id
 			from person inner join accompanist on accompanist.user_id = person.user_id
 			inner join vote on vote.user_id = person.user_id
 			where person.is_acm=True order by accompanist.price"""
 	cur.execute(sql)
 	profiles=cur.fetchall()
+	repertoires=[]
+	for profile in profiles:
+		sql="select composer.surname from acm_comp inner join composer on acm_comp.composer_id=composer.composer_id where acm_comp.acm_id ={}".format(profile[7])
+		cur.execute(sql)
+		rep=cur.fetchall()
+		repertoires.append(rep)
 	cur.execute("select city from accompanist group by city order by city asc")
 	cities = cur.fetchall()
 	cur.execute("select surname from composer group by surname order by surname asc")
 	composers = cur.fetchall()
-	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers)
+	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers, repertoires=repertoires)
 
 @app.route("/profile/<username>/comment", methods=['GET', 'POST'])
 @login_required
@@ -244,7 +260,7 @@ def new_reservation(username):
 		cur.execute(sql_2)
 		acm_id = cur.fetchone()
 
-		sql = "insert into reservation (acm_id, rsr_date, city) values ({},'{}','{}')".format(acm_id[0],form.date.data,form.city.data)
+		sql = "insert into reservation (acm_id, rsr_date, city,content) values ({},'{}','{}', '{}')".format(acm_id[0],form.date.data,form.city.data, form.content.data)
 		cur.execute(sql)
 		con.commit()
 		flash('Reservation is added to accompanist.')
@@ -353,8 +369,11 @@ def update_acm(username):
 	cur.execute(sql)
 	info = cur.fetchone()
 	
-
-	cur.execute("select surname from composer group by surname order by surname asc")
+	sql = """select surname from composer left join 
+				(select composer.composer_id from acm_comp 
+				inner join composer on composer.composer_id = acm_comp.composer_id where acm_comp.acm_id = {}) 
+				as m1 on composer.composer_id = m1.composer_id where m1.composer_id is NULL order by surname""".format(info[0])
+	cur.execute(sql)
 	composers = cur.fetchall()
 
 	form = UpdateAcm()
@@ -397,49 +416,93 @@ def update_acm(username):
 def add_composer():
 	form=ComposerForm()
 	if form.validate_on_submit():
-		sql ="insert into composer (name,surname) values (%s,%s)"
-		cur.execute(sql,(form.name.data,form.surname.data))
-		con.commit()
-		flash("Composer is added")
-		return redirect(url_for('home', title = "Home"))
+		sql = "select * from composer where name = '{}' and surname = '{}'".format(form.name.data,form.surname.data)
+		cur.execute(sql)
+		isin = cur.fetchone()
+		if isin is None:
+			sql ="insert into composer (name,surname) values (%s,%s)"
+			cur.execute(sql,(form.name.data,form.surname.data))
+			con.commit()
+			flash("Composer is added")
+			return redirect(url_for('home'))
+		flash('This composer is already in database.')
 	return render_template('add_comp.html', title='Composer', form=form)
 
 @app.route("/delete_exp/<username>", methods=['GET','POST'])
 @login_required
 def delete_exp(username):
+	sql ="select user_id from person where username='{}'".format(username)
+	cur.execute(sql)
+	user_id=cur.fetchone()
 	form=ExperienceForm()
 	if form.validate_on_submit():
-		sql ="select user_id from person where username='{}'".format(username)
+		sql = "select * from experience where acm_id={} and city = '{}' and exp_year ={}".format(user_id[0],form.city.data,form.year.data)
 		cur.execute(sql)
-		user_id=cur.fetchone()
-		sql = "delete from experience where acm_id={} and city = '{}' and exp_year ={}".format(user_id[0],form.city.data,form.year.data)
-		cur.execute(sql)
-		con.commit()
-		flash('Your experience has been deleted.')
-		return redirect(url_for('profile', title="Profile", username=username))
+		isin = cur.fetchone()
+		if isin is not None:
+			sql = "delete from experience where acm_id={} and city = '{}' and exp_year ={}".format(user_id[0],form.city.data,form.year.data)
+			cur.execute(sql)
+			con.commit()
+			flash('Your experience has been deleted.')
+			return redirect(url_for('profile', title="Profile", username=username))
+		flash('No such experience.')
 	return render_template('experience.html', title='Experience', form=form, min_year=1900, max_year=datetime.now)
 
 @app.route("/delete_rsr/<username>", methods=['GET','POST'])
 @login_required
 def delete_rsr(username):
+	sql ="select user_id from person where username='{}'".format(username)
+	cur.execute(sql)
+	user_id=cur.fetchone()
 	form=ReservationForm()
 	if form.validate_on_submit():
-		sql ="select user_id from person where username='{}'".format(username)
+		sql="select * from reservation where acm_id={} and city ='{}' and rsr_date ='{}'".format(user_id[0],form.city.data,form.date.data)
 		cur.execute(sql)
-		user_id=cur.fetchone()
-		sql = "delete from reservation where acm_id={} and city = '{}' and rsr_date ={}".format(user_id[0],form.city.data,form.date.data)
-		cur.execute(sql)
-		con.commit()
-		flash('Your reservation has been deleted.')
-		return redirect(url_for('profile', title="Profile", username=username))
+		isin = cur.fetchone()
+		if isin is not None:
+			sql = "delete from reservation where acm_id={} and city = '{}' and rsr_date ='{}'".format(user_id[0],form.city.data,form.date.data)
+			cur.execute(sql)
+			con.commit()
+			flash('Your reservation has been deleted.')
+			return redirect(url_for('profile',username=username))
+		flash('No such reservation.')
 	return render_template('reservation.html', title='Reservation', form=form)
 
+@app.route("/list_rsr/<username>/", methods=['GET','POST'])
+@login_required
+def list_rsr(username):
+	sql ="select user_id from person where username='{}'".format(username)
+	cur.execute(sql)
+	user_id=cur.fetchone()
+	sql = "select city,rsr_date,content from reservation where acm_id={}".format(user_id[0])
+	cur.execute(sql)
+	list_rsr = cur.fetchall()
+	return render_template('list_rsr.html', list=list_rsr, user=username, title="List Reservation")
 
-
-
-
-
-
+@app.route("/update_rsr/<username>/<city>/<date>", methods=['GET','POST'])
+@login_required
+def update_rsr(username,city,date):
+	sql ="select user_id from person where username='{}'".format(username)
+	cur.execute(sql)
+	user_id=cur.fetchone()
+	sql="select city,rsr_date,content,reservation_id from reservation where acm_id={} and city ='{}' and rsr_date ='{}'".format(user_id[0],city,date)
+	cur.execute(sql)
+	isin = cur.fetchone()
+	form=ReservationForm()
+	if isin is not None:
+		if form.validate_on_submit():
+			sql = "update reservation set city = '{}', rsr_date = '{}', content = '{}' where reservation_id = {} and acm_id={}".format(form.city.data, form.date.data, form.content.data, isin[3], user_id[0])
+			cur.execute(sql)
+			con.commit()
+			flash('Reservation updated.')
+			return redirect(url_for('profile',username=username))
+		elif request.method == 'GET':
+			form.city.data = isin[0]
+			form.date.data=isin[1]
+			form.content.data = isin[2]
+			return render_template('update_rsr.html', title ="Update", form=form)
+	flash('No such reservation.')
+	return redirect(url_for('profile',username=username))
 
 
 
