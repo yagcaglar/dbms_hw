@@ -1,6 +1,4 @@
-import server
+from server import app
 
-app = server.create_app()
-
-if name == "main":
-    app.run()
+if __name__ =='__main__':
+	app.run(debug=True)
