@@ -16,6 +16,6 @@ login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
 import routes
-import datab
+from datab import create_db
 
 create_db()
