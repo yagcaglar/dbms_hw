@@ -15,13 +15,15 @@ class RegistrationForm(FlaskForm):
 	submit = SubmitField('Sign Up')
 
 	def validate_username(self, username):
-		cur.execute("SELECT username FROM person where username='%s'" % username.data)
+		sql="SELECT username FROM person where username='%s'".format(username.data)
+		cur.execute(sql)
 		user = cur.fetchone()
 		if user is not None:
 			raise ValidationError('That username is taken. Please choose a different one.')
 
 	def validate_email(self, email):
-		cur.execute("SELECT mail FROM person where mail='%s'" % email)
+		sql="SELECT mail FROM person where mail='%s'".format(email.data)
+		cur.execute(sql)
 		user = cur.fetchone()
 		if user is not None:
 			raise ValidationError('That email is taken. Please choose a different one.')
