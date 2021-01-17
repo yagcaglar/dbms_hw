@@ -243,7 +243,7 @@ def new_comment(username):
 		customer_id = cur.fetchone()
 		
 		com_content = form.content.data
-		time = date.today().strftime("%d/%m/%Y")
+		time = date.today().strftime("%Y/%m/%d")
 		
 		cur.execute(sql,(int(acm_id[0]),int(customer_id[0]),com_content,time))
 		con.commit()
