@@ -17,7 +17,7 @@ class RegistrationForm(FlaskForm):
 	def validate_username(self, username):
 		sql="SELECT username FROM person where username='%s'".format(username.data)
 		cur.execute(sql)
-		user = cur.fetchone(
+		user = cur.fetchone()
 		if user is not None:
 			raise ValidationError('That username is taken. Please choose a different one.')
 
