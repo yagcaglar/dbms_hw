@@ -9,6 +9,7 @@ from user import get_user
 def load_user(username):
 	return get_user(username)
 
+#home page of the website, includes number of users
 @app.route("/")
 @app.route("/home")
 def home():
@@ -17,7 +18,11 @@ def home():
 	cur.execute("select count(user_id) from accompanist")
 	acm = cur.fetchone()
 	return render_template('home.html', person=person, acm= acm)
-	
+
+#registration page, locally validate_on_submit works fine for username and mail check
+#but heroku gives server error so i implemented if..is none: statement to control if mail or username exists in database.
+#then it inserts to table and if the user selected the accompanist button, it creates vote and acocmpanist table.
+#accompanists logs in to update information, user should login itself.
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
@@ -53,6 +58,7 @@ def register():
 		flash('This username already exist.')
 	return render_template('register.html', title='Register', form=form)
 
+#phone,city,price,repertoire information of accompanist table are added.
 @app.route("/add_info/<username>", methods=['GET', 'POST'])
 @login_required
 def add_info(username):
@@ -81,6 +87,7 @@ def add_info(username):
 			return redirect(url_for('home'))
 	return render_template('addinfo.html', composers = composers, title = "Add Information", form = form)
 
+#login function of website
 @app.route("/login", methods=['GET', 'POST'])
 def login():
 	if current_user.is_authenticated:
@@ -96,12 +103,14 @@ def login():
 			flash('Login Unsuccessful. Please check username and password', 'danger')
 	return render_template('login.html', title='Login', form=form)
 
+#logout function of website
 @app.route("/logout")
 @login_required
 def logout():
 	logout_user()
 	return redirect(url_for('home'))
 
+#profile of current customer.includes name,surname,username and favourite accompanist list information of current_user.
 @app.route("/account/<username>")
 @login_required
 def account(username):
@@ -113,6 +122,8 @@ def account(username):
 	acms = cur.fetchall()
 	return render_template('account.html', title='Account', user = user, acms = acms)
 
+#profile of accompanist.
+#name, surname, username, contact informations, repertoire,comments,experiences,reservations are listed.
 @app.route("/profile/<username>")
 def profile(username):
 	sql = "select user_id from person where username = '%s'" %username
@@ -152,6 +163,9 @@ def profile(username):
 		flash('No such accompanist account.')
 		return redirect(url_for('home'))
 
+#list of all accompanists that are signed in with informations.
+#name,surname,username,repertoire,city,price,vote,score
+#includes all composers and cities that are added to database for filtering.
 @app.route("/list_profiles")
 def list_profiles():
 	sql = """select person.name, person.surname, person.username, accompanist.city, accompanist.price, vote.vote, vote.score,person.user_id
@@ -172,6 +186,9 @@ def list_profiles():
 	composers = cur.fetchall()
 	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers, repertoires=repertoires)
 
+#lists all accompanist with related city.
+#name,surname,username,repertoire,city,price,vote,score
+#includes all composers and cities that are added to database for filtering.
 @app.route("/list_profiles/filter_by_city/<city_name>")
 def filter_by_city(city_name):
 	print(city_name)
@@ -192,6 +209,9 @@ def filter_by_city(city_name):
 	composers = cur.fetchall()
 	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers, repertoires=repertoires)
 
+#lists all accompanist who can play from related composer.
+#name,surname,username,repertoire,city,price,vote,score
+#includes all composers and cities that are added to database for filtering.
 @app.route("/list_profiles/filter_by_composer/<composer_surname>")
 def filter_by_composer(composer_surname):
 	sql = "select composer_id from composer where surname='%s'"%composer_surname
@@ -217,6 +237,9 @@ def filter_by_composer(composer_surname):
 	composers = cur.fetchall()
 	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers, repertoires=repertoires)
 
+#filters all accompanist by price asc.
+#name,surname,username,repertoire,city,price,vote,score
+#includes all composers and cities that are added to database for filtering.
 @app.route("/list_profiles/filter_by_price")
 def filter_by_price():
 	sql = """select person.name, person.surname, person.username, accompanist.city, accompanist.price, vote.vote, vote.score,person.user_id
@@ -237,6 +260,7 @@ def filter_by_price():
 	composers = cur.fetchall()
 	return render_template('list_profiles.html', title='Profiles', profiles=profiles, cities = cities, composers = composers, repertoires=repertoires)
 
+#function for adding comment to given accompanist with current account.
 @app.route("/profile/<username>/comment", methods=['GET', 'POST'])
 @login_required
 def new_comment(username):
@@ -261,6 +285,7 @@ def new_comment(username):
 		return redirect(url_for('profile', title = "Profile", username = username))
 	return render_template('comment.html', title='Comment', form=form)
 
+#function for adding reservation to the profile. only allowed to self addition.
 @app.route("/profile/<username>/reservation", methods=['GET', 'POST'])
 @login_required
 def new_reservation(username):
@@ -277,6 +302,7 @@ def new_reservation(username):
 		return redirect(url_for('profile', title = "Profile", username = username))
 	return render_template('reservation.html', title='Reservation', form=form)
 
+#function for adding experience to the profile. only allowed to self addition.
 @app.route("/profile/<username>/experience", methods=['GET', 'POST'])
 @login_required
 def new_experience(username):
@@ -293,6 +319,7 @@ def new_experience(username):
 		return redirect(url_for('profile', title = "Profile", username = username))
 	return render_template('experience.html', title='Experience', form=form, min_year=1900, max_year=datetime.now().year)
 
+#function for vote. updates vote,score information of the accompanist.
 @app.route("/profile/<username>/<int:like>")
 @login_required
 def like(username, like):
@@ -315,6 +342,7 @@ def like(username, like):
 	con.commit()
 	return redirect(url_for('profile', title = "Profile", username = username))
 
+#function for adding accompanist to favourite list. if the key pair already exists throws an error.
 @app.route("/addlist/<username>")
 @login_required
 def add_list(username):
@@ -343,6 +371,8 @@ def add_list(username):
 	
 	return redirect(url_for('profile', title = "Profile", username = username))
 
+#function for updating customer account.
+#name,surname, username, mail
 @app.route("/update/<username>", methods=['GET', 'POST'])
 @login_required
 def update_account(username):
@@ -363,6 +393,8 @@ def update_account(username):
 		form.mail.data = info[4]
 	return render_template('update.html', title ="Update", form=form)
 
+#function for deleting account.
+#as tables are formated "on delete cascade" deletes all information about that account(comment etc.)
 @app.route("/delete/<username>", methods=['POST'])
 @login_required
 def delete_acc(username):
@@ -372,6 +404,9 @@ def delete_acc(username):
 	flash('Your account has been deleted')
 	return redirect(url_for('home'))
 
+#function for updating accompanist account.
+#name, surname, username, mail, phone, city, university, price
+#added composer informations can not change, does not show added composers.
 @app.route("/update_acm/<username>", methods=['GET', 'POST'])
 @login_required
 def update_acm(username):
@@ -421,6 +456,7 @@ def update_acm(username):
 		form.price.data = infos[3] 
 	return render_template('update_acm.html', composers = composers, title = "Update Information", form = form)
 
+#function for adding composers to repertoire
 @app.route("/add_comp", methods=['GET', 'POST'])
 @login_required
 def add_composer():
@@ -438,6 +474,7 @@ def add_composer():
 		flash('This composer is already in database.')
 	return render_template('add_comp.html', title='Composer', form=form)
 
+#delete function for added experiences. if related experience can not found, throws error.
 @app.route("/delete_exp/<username>", methods=['GET','POST'])
 @login_required
 def delete_exp(username):
@@ -458,6 +495,7 @@ def delete_exp(username):
 		flash('No such experience.')
 	return render_template('experience.html', title='Experience', form=form, min_year=1900, max_year=datetime.now)
 
+#delete function for added reservations. if related reservation can not found, throws error.
 @app.route("/delete_rsr/<username>", methods=['GET','POST'])
 @login_required
 def delete_rsr(username):
@@ -478,6 +516,8 @@ def delete_rsr(username):
 		flash('No such reservation.')
 	return render_template('reservation.html', title='Reservation', form=form)
 
+#list all reservations related to that accompanist
+#this function is implemented for update reservation function.
 @app.route("/list_rsr/<username>/", methods=['GET','POST'])
 @login_required
 def list_rsr(username):
@@ -489,6 +529,7 @@ def list_rsr(username):
 	list_rsr = cur.fetchall()
 	return render_template('list_rsr.html', list=list_rsr, user=username, title="List Reservation")
 
+#updates selected reservation with new informations.
 @app.route("/update_rsr/<username>/<city>/<date>", methods=['GET','POST'])
 @login_required
 def update_rsr(username,city,date):
