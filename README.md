@@ -1,2 +1,2 @@
 # dbms_hw
-#https://accompaniment.herokuapp.com
+https://accompaniment.herokuapp.com
