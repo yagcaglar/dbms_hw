@@ -1,3 +1,4 @@
+#this file includes queries for creation of the database and composer table's rows that are included by hand
 from server import cur,con
 
 def create_db():
