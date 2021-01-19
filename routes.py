@@ -24,23 +24,31 @@ def register():
 		return redirect(url_for('home'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-		sql="insert into person (name,surname,username,password,mail,is_acm) values(%s,%s,%s,%s,%s,%s)"
-		cur.execute(sql,(form.name.data, form.surname.data, form.username.data, hashed_password, form.email.data, bool(form.is_acm.data)))
-		con.commit()
-		if bool(form.is_acm.data) == True:
-			sql ="select user_id from person where username = '{}'".format(form.username.data)
+		sql="select username from person where username='{}'".format(form.username.data)
+		cur.execute(sql)
+		account = cur.fetchone()
+		if account is None:
+			sql="select username from person where mail='{}'".format(form.email.data)
 			cur.execute(sql)
-			user_id = cur.fetchone()
-			cur.execute("insert into accompanist (user_id) values(%s)",(user_id))
-			cur.execute("insert into vote (user_id) values(%s)",(user_id))
-			con.commit()
-			user=get_user(form.username.data)
-			login_user(user)
-			flash('Your account has been created please add more information.')
-			return redirect(url_for('add_info', username = form.username.data))
-		flash('Your account has been created!')
-		return redirect(url_for('login'))
+			account = cur.fetchone()
+			if account is None:
+				hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+				sql="insert into person (name,surname,username,password,mail,is_acm) values(%s,%s,%s,%s,%s,%s)"
+				cur.execute(sql,(form.name.data, form.surname.data, form.username.data, hashed_password, form.email.data, bool(form.is_acm.data)))
+				con.commit()
+				if bool(form.is_acm.data) == True:
+					sql ="select user_id from person where username = '{}'".format(form.username.data)
+					cur.execute(sql)
+					user_id = cur.fetchone()
+					cur.execute("insert into accompanist (user_id) values(%s)",(user_id))
+					cur.execute("insert into vote (user_id) values(%s)",(user_id))
+					con.commit()
+					user=get_user(form.username.data)
+					login_user(user)
+					flash('Your account has been created please add more information.')
+					return redirect(url_for('add_info', username = form.username.data))
+				flash('Your account has been created!')
+				return redirect(url_for('login'))
 	return render_template('register.html', title='Register', form=form)
 
 @app.route("/add_info/<username>", methods=['GET', 'POST'])
