@@ -49,6 +49,8 @@ def register():
 					return redirect(url_for('add_info', username = form.username.data))
 				flash('Your account has been created!')
 				return redirect(url_for('login'))
+			flash('This mail already exists.')
+		flash('This username already exist.')
 	return render_template('register.html', title='Register', form=form)
 
 @app.route("/add_info/<username>", methods=['GET', 'POST'])
