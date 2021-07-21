@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
-{% block title %}Reservation{% endblock %}
+{% block title %}Rezervasyon{% endblock %}
 {% block content %}
     <section class="hero">
       <div class="hero-body">
         <div class="container has-text-centered">
           <div class="column is-4 is-offset-4" style="background-color: white;border-radius:10px; padding-top:30px;">
-            <h3 class="title has-text-grey">Reservation</h3>
+            <h3 class="title has-text-grey">Reservasyon</h3>
             <div class="box">
               <form action="" method="post" name="login">
                 {{ form.csrf_token }}
@@ -25,7 +25,7 @@
                 <div class="field">
                     <div class="control">
                       {{ form.city(required=True, autofocus=True,
-                        class='input is-large',placeholder='Where will the accompanist play?') }}
+                        class='input is-large',placeholder='Korrepetitör nerede çalacak?') }}
                     </div>
                     {% for error in form.city.errors %}
                       <p class="help has-background-warning">
@@ -38,7 +38,7 @@
                     <div class="control">
                       {{ form.content(required=True, autofocus=True,
                                        class='textarea',
-                                       placeholder='Brief information.') }}
+                                       placeholder='Eşlik hakkında kısa bir açıklama giriniz.') }}
                     </div>
                     {% for error in form.content.errors %}
                       <p class="help has-background-warning">

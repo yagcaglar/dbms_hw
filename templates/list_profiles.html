@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
-{% block title %}Profiles{% endblock %}
+{% block title %}Korrepetitörler{% endblock %}
 {% block content %}
 <section class="hero"  style="background-color: white; margin:50px 60px 20px 60px; padding-bottom:50px; border-radius:10px;">
       <div class="hero-body">
 		<div class="container">
-			<p class="title">All Accompanists</p>
-				<p class ="subtitle"> Filter by</p>
+			<p class="title">Korrepetitörler</p>
+				<p class ="subtitle"> Filtrele: </p>
 				
 				<nav class="navbar"> 
-					
+					<!--
 					<div class="navbar-brand">
 						<span class="navbar-item">
 							{%if composers %}
@@ -27,13 +27,13 @@
 							{% endif %}
 						</span>
 					</div>
-
+-->
 					<div class="navbar-brand">
 						<span class="navbar-item">	
 							{%if cities%}
 							<div class="dropdown is-hoverable">
 								<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-									<span>City</span>
+									<span>Şehir</span>
 								</button>
 								<div class="dropdown-menu" id="dropdown-menu" role="menu">
 									<div class="dropdown-content">
@@ -52,7 +52,7 @@
 						<span class="navbar-item">
 							<div class="dropdown is-hoverable">
 								<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-									<span><a href = "{{url_for('filter_by_price')}}">Price</a></span>
+									<span><a href = "{{url_for('filter_by_price')}}">Ücret</a></span>
 								</button>
 							</div>
 						</span>
@@ -63,13 +63,13 @@
 				<table class="table is-bordered is-hoverable is-narrow">
 					<thead>
 						<tr>
-							<th>Name</th>
-							<th>Surname</th>
-							<th>Username</th>
-							<th>City</th>
-							<th>Price</th>
-							<th>Vote</th>
-							<th>Score</th>
+							<th>İsim</th>
+							<th>Çağlar</th>
+							<th>Kullanıcı Adı</th>
+							<th>Şehir</th>
+							<th>Ücret</th>
+							<th>Oy</th>
+							<th>Puan</th>
 							<th>Repertoire</th>
 						
 						</tr>

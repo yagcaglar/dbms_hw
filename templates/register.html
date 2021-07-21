@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
-{% block title %}Register{% endblock %}
+{% block title %}Üye Ol{% endblock %}
 {% block content %}
 
 <section class="hero">
       <div class="hero-body">
         <div class="container has-text-centered">
           <div class="column is-4 is-offset-4" style="background-color: white;border-radius:10px; padding-top:30px;">
-            <h3 class="title has-text-grey">Register</h3>
+            <h3 class="title has-text-grey">Üye Ol</h3>
             <div class="box">
               <form action="" method="post" name="login">
                 {{ form.csrf_token }}
@@ -15,7 +15,7 @@
                   <div class="control">
                     {{ form.name(required=True, autofocus=True,
                                      class='input is-large',
-                                     placeholder='Name') }}
+                                     placeholder='Ad') }}
                   </div>
                   {% for error in form.name.errors %}
                     <p class="help has-background-warning">
@@ -27,7 +27,7 @@
                   <div class="control">
                     {{ form.surname(required=True, autofocus=True,
                                      class='input is-large',
-                                     placeholder='Surname') }}
+                                     placeholder='Soyad') }}
                   </div>
                   {% for error in form.surname.errors %}
                     <p class="help has-background-warning">
@@ -40,7 +40,7 @@
                   <div class="control">
                     {{ form.username(required=True, autofocus=True,
                                      class='input is-large',
-                                     placeholder='Username') }}
+                                     placeholder='Kullanıcı Adı') }}
                   </div>
                   {% for error in form.username.errors %}
                     <p class="help has-background-warning">
@@ -65,7 +65,7 @@
                 <div class="field">
                   <div class="control">
                     {{ form.password(required=True, class='input is-large',
-                                     placeholder='Password') }}
+                                     placeholder='Şifre') }}
                   </div>
                   {% for error in form.password.errors %}
                     <p class="help has-background-warning">
@@ -77,7 +77,7 @@
 				<div class="field">
                   <div class="control">
                     {{ form.confirm_password(required=True, class='input is-large',
-                                     placeholder='Confirm password') }}
+                                     placeholder='Şifre tekrar') }}
                   </div>
                   {% for error in form.confirm_password.errors %}
                     <p class="help has-background-warning">
@@ -99,11 +99,11 @@
                 </div>
 				
                 <button class="button is-block is-dark is-large is-fullwidth">
-                  Register
+                  Üye Ol
                 </button>
               </form>
 			  <div>
-				<small> Already have an Account? <a href="{{url_for('login')}}">Login</a></small>
+				<small> Zaten hesabınız var mı? <a href="{{url_for('login')}}">Giriş Yap.</a></small>
 			  </div>
             </div>
           </div>

@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
-{% block title %}Add Composer{% endblock %}
+{% block title %}Eşlikçi Bilgileri{% endblock %}
 {% block content %}
     <section class="hero">
       <div class="hero-body">
         <div class="container has-text-centered">
           <div class="column is-4 is-offset-4" style="background-color: white; border-radius:10px;padding-top:30px;">
-            <h3 class="title has-text-grey">Add Information</h3>
+            <h3 class="title has-text-grey">Bilgilerinizi Ekleyiniz</h3>
             <div class="box">
               <form action="" method="post">
                 {{ form.csrf_token }}
@@ -14,7 +14,7 @@
                   <div class="control">
                     {{ form.phone(autofocus=True,
                                      class='input is-large',
-                                     placeholder='Phone Number') }}
+                                     placeholder='Telefon Numarası') }}
                   </div>
                   {% for error in form.phone.errors %}
                     <p class="help has-background-warning">
@@ -26,7 +26,7 @@
                   <div class="control">
                     {{ form.city(autofocus=True,
                                      class='input is-large',
-                                     placeholder='City') }}
+                                     placeholder='Şehir') }}
                   </div>
                   {% for error in form.city.errors %}
                     <p class="help has-background-warning">
@@ -34,7 +34,7 @@
                     </p>
                   {% endfor %}
                 </div>
-
+<!--
                 <div class="field">
                   <div class="control">
                     {{ form.university(autofocus=True,
@@ -47,12 +47,12 @@
                     </p>
                   {% endfor %}
                 </div>
-
+-->
                 <div class="field">
                   <div class="control">
                     {{ form.price(autofocus=True,
                                      class='input is-large',
-                                     placeholder='Price') }}
+                                     placeholder='Ücret(TL)') }}
                   </div>
                   {% for error in form.price.errors %}
                     <p class="help has-background-warning">
@@ -61,7 +61,7 @@
                   {% endfor %}
                 <div class="field">
                   <div class="control">
-                    <p><strong>Choose composer/s you can play from.</strong></p>
+                    <p><strong>Enstrüman seçiniz.</strong></p>
                     {%for composer in composers%}
                     <input type ="checkbox" name = "composer" value = "{{composer[0]}}"> {{composer[0]}}
                     {%endfor%}

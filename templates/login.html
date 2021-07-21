@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Login{% endblock %}
+{% block title %}Giriş Yap{% endblock %}
 {% block content %}
     <section class="hero">
       <div class="hero-body">
@@ -14,7 +14,7 @@
                   <div class="control">
                     {{ form.username(required=True, autofocus=True,
                                      class='input is-large',
-                                     placeholder='Username') }}
+                                     placeholder='Kullancı Adı') }}
                   </div>
                   {% for error in form.username.errors %}
                     <p class="help has-background-warning">
@@ -26,7 +26,7 @@
                 <div class="field">
                   <div class="control">
                     {{ form.password(required=True, class='input is-large',
-                                     placeholder='Password') }}
+                                     placeholder='Şifre') }}
                   </div>
                   {% for error in form.password.errors %}
                     <p class="help has-background-warning">
@@ -40,7 +40,7 @@
                 </button>
               </form>
 			  <div>
-				<small>Need an Account? <a href="{{url_for('register')}}">Sign Up</a></small>
+				<small>Üye değil misiniz? <a href="{{url_for('register')}}">Üye Ol.</a></small>
 			  </div>
             </div>
           </div>

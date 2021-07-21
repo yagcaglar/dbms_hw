@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
-{% block title %}Add Composer{% endblock %}
+{% block title %}Profil Düzenleme{% endblock %}
 {% block content %}
     <section class="hero">
       <div class="hero-body">
         <div class="container has-text-centered">
           <div class="column is-4 is-offset-4" style="background-color: white; border-radius:10px; padding-top:30px;">
-            <h3 class="title has-text-grey">Update Information</h3>
+            <h3 class="title has-text-grey">Profil Düzenleme</h3>
             <div class="box">
                 <div>
-                    <strong><a href="{{url_for('new_experience', username=form.username.data)}}">Add Experience</a></strong>
+                    <strong><a href="{{url_for('new_experience', username=form.username.data)}}">Profil özeti ekle</a></strong>
                     <strong> | </strong>
-                    <strong><a href="{{url_for('new_reservation', username=form.username.data)}}">Add Reservation</a></strong>
+                    <strong><a href="{{url_for('new_reservation', username=form.username.data)}}">Reservasyon ekle</a></strong>
                     <br>
                     <strong><a href="{{url_for('delete_exp', username=form.username.data)}}">Delete Experience</a></strong>
                     <strong> | </strong>
@@ -24,7 +24,7 @@
                   <div class="control">
                     {{ form.name(required=True, autofocus=True,
                                      class='input is-large',
-                                     placeholder='Name') }}
+                                     placeholder='Ad') }}
                   </div>
                   {% for error in form.name.errors %}
                     <p class="help has-background-warning">
@@ -36,7 +36,7 @@
                   <div class="control">
                     {{ form.surname(required=True, autofocus=True,
                                      class='input is-large',
-                                     placeholder='Surname') }}
+                                     placeholder='Soyad') }}
                   </div>
                   {% for error in form.surname.errors %}
                     <p class="help has-background-warning">
@@ -49,7 +49,7 @@
                   <div class="control">
                     {{ form.username(required=True, autofocus=True,
                                      class='input is-large',
-                                     placeholder='Username') }}
+                                     placeholder='Kullanıcı Adı') }}
                   </div>
                   {% for error in form.username.errors %}
                     <p class="help has-background-warning">
@@ -75,7 +75,7 @@
                   <div class="control">
                     {{ form.phone(autofocus=True,
                                      class='input is-large',
-                                     placeholder='Phone Number') }}
+                                     placeholder='Telefon Numarası') }}
                   </div>
                   {% for error in form.phone.errors %}
                     <p class="help has-background-warning">
@@ -87,7 +87,7 @@
                   <div class="control">
                     {{ form.city(autofocus=True,
                                      class='input is-large',
-                                     placeholder='City') }}
+                                     placeholder='Şehir') }}
                   </div>
                   {% for error in form.city.errors %}
                     <p class="help has-background-warning">
@@ -95,7 +95,7 @@
                     </p>
                   {% endfor %}
                 </div>
-
+<!--
                 <div class="field">
                   <div class="control">
                     {{ form.university(autofocus=True,
@@ -107,13 +107,13 @@
                         {{ error }}
                     </p>
                   {% endfor %}
-                </div>
+                </div>-->
 
                 <div class="field">
                   <div class="control">
                     {{ form.price(autofocus=True,
                                      class='input is-large',
-                                     placeholder='Price') }}
+                                     placeholder='Ücret(TL)') }}
                   </div>
                   {% for error in form.price.errors %}
                     <p class="help has-background-warning">
@@ -123,7 +123,7 @@
                 <div class="field">
                   <div class="control">
         
-                    <p><strong>Choose composer/s you can play from.</strong></p>
+                    <p><strong>Enstrüman seçiniz.</strong></p>
                
                     {%for composer in composers%}
       
@@ -135,13 +135,13 @@
                 </div>
 
                 <button class="button is-block is-dark is-large is-fullwidth">
-                    Update
+                    Kaydet
                 </button>
               </form>
               <br>
 
               <form action="{{url_for('delete_acc', username = form.username.data)}}" method="POST">
-                <button class="button is-block is-danger is-large is-fullwidth" >Delete Account</button>
+                <button class="button is-block is-danger is-large is-fullwidth" >Hesabı Sil</button>
               </form>
 
             </div>
