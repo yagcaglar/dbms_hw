@@ -27,44 +27,44 @@
 			<nav class="navbar" aria-label="main navigation">
 					<div class="navbar-start">
 					  <span class="navbar-item">
-						<a class="button is-dark" href="{{ url_for('home') }}">Home</a>
+						<a class="button is-dark" href="{{ url_for('home') }}">Ana Sayfa</a>
 					  </span>
 					  <span class="navbar-item">
-						<a class="button is-dark" href="{{ url_for('list_profiles') }}">Accompanist List</a>
+						<a class="button is-dark" href="{{ url_for('list_profiles') }}">Korrepetitör Listesi</a>
 						</span>
-						{%if current_user.is_authenticated%}
+						<!-- {%if current_user.is_authenticated%}
 						<span class="navbar-item">
-							<a class="button is-dark" href="{{ url_for('add_composer') }}">Add Composer</a>
+							<a class="button is-dark" href="{{ url_for('add_composer') }}">Besteci Ekle</a>
 							</span>
-						{%endif%}
+						{%endif%} -->
 					</div>
 					<div class="navbar-end">
 					  {%if current_user.is_anonymous %}
 					   <span class="navbar-item">
-						<a class="button is-dark" href="{{ url_for('login') }}">Login</a>
+						<a class="button is-dark" href="{{ url_for('login') }}">Giriş Yap</a>
 						</span>
 						<span class="navbar-item">
-						<a class="button is-dark" href="{{ url_for('register') }}">Register</a>
+						<a class="button is-dark" href="{{ url_for('register') }}">Kaydol</a>
 					  {% else %}	
 					 
 
 						{%if current_user.acm == False %}
 						 <span class="navbar-item">
-						<a class="button is-dark" href="{{ url_for('account', username=current_user.username) }}">Profile</a>
+						<a class="button is-dark" href="{{ url_for('account', username=current_user.username) }}">Profil</a>
 					</span>
 					<span class="navbar-item">
-						<a class="button is-dark" href="{{ url_for('update_account', username=current_user.username) }}">Update</a>
+						<a class="button is-dark" href="{{ url_for('update_account', username=current_user.username) }}">Profili Güncelle</a>
 					</span>
 						{%else%}
 						<span class="navbar-item">
-						<a class="button is-dark" href="{{ url_for('profile', username=current_user.username) }}">Profile</a>
+						<a class="button is-dark" href="{{ url_for('profile', username=current_user.username) }}">Profil</a>
 					</span>
 					<span class="navbar-item">
-						<a class="button is-dark" href="{{ url_for('update_acm', username=current_user.username) }}">Update</a>
+						<a class="button is-dark" href="{{ url_for('update_acm', username=current_user.username) }}">Profili Güncelle</a>
 					</span>
 						{%endif%}
 						<span class="navbar-item">
-							<a class="button is-dark is-left" href="{{ url_for('logout') }}">Logout</a>
+							<a class="button is-dark is-left" href="{{ url_for('logout') }}">Çıkış Yap</a>
 						  </span>
 						  {% endif %}
 						

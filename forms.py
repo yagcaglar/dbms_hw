@@ -11,7 +11,7 @@ class RegistrationForm(FlaskForm):
 	email = StringField('Email',validators=[DataRequired(), Email()])
 	password = PasswordField('Password', validators=[DataRequired()])
 	confirm_password = PasswordField('Confirm Password',validators=[DataRequired(), EqualTo('password')])
-	is_acm =RadioField('Accompanist',coerce = int, choices = [(1, 'Korrepetitör'), (0, 'Kullanıcı')], default = 0)
+	is_acm =RadioField('Accompanist',coerce = int, choices = [(1, 'Korrepetitör olarak kaydol.'), (0, 'Kullanıcı olarak kaydol.')], default = 0)
 	submit = SubmitField('Sign Up')
 
 	def validate_username(self, username):
